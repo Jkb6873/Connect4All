@@ -24,9 +24,6 @@ placeDisc(1, 3);
 placeDisc(1, 3);
 placeDisc(1, 4);
 
-
-
-
 function checkForVictory(player,row,col){
   if(checkVert(row, col) || checkHori(row, col) || checkLeftDiag(row, col) || checkRightDiag(row, col)){
     console.log("Player ", player, " wins!");
