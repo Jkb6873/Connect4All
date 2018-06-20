@@ -58,6 +58,23 @@ export default class Connect4 extends Component {
         }
         else nextTeam = 1;
         newVotes[column] = 1;
+
+        let move = {
+            vote: column
+        }
+        fetch('/gamestate', {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(move), // data can be `string` or {object}!
+            headers:{
+            'Content-Type': 'application/json'
+            }
+      }).then(res => res.json())
+        .then(newState => {
+            //let gamestate = newState.grid;
+            //this.setState({grid: gamestate});
+            console.log(newState);
+        })
+                
         this.setState({
             grid: newGrid,
             inserts: (this.state.inserts+1),
