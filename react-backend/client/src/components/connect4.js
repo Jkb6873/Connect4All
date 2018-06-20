@@ -25,7 +25,7 @@ export default class Connect4 extends Component {
         if(!this.state.userName){
             //this.promptUserName();
         }
-        fetch('/users')
+        fetch('/gamestate')
             .then(res => res.json())
             .then(newState => {
                 let gamestate = newState.grid;
