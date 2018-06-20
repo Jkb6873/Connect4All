@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Connect4Board from './connect4board.js';
 import axios from 'axios';
+import Connect4Status from './connect4status.js';
 
 
 export default class Connect4 extends Component {
@@ -18,12 +19,23 @@ export default class Connect4 extends Component {
             ],
             inserts: 0
         };
-      }
+    }
+    insertPiece = (column) => {
+        let newGrid = this.state.grid;
+        for (let row in newGrid) {
+            let next = Number(row) + 1;
+            //console.log(newGrid);
+        }
+        console.log(column + " added")
+        this.setState({
+            grid: newGrid
+        })
+    }  
     render() {
         return (
             <div>
-                Welcome to Connect4All
-                <Connect4Board grid={this.state.grid}/>
+                <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
+                <Connect4Status />
             </div>
         )
     }
