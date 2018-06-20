@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
   console.log("\n *START* \n");
   var content = fs.readFileSync("./database/gamestate.json");
   console.log("Output Content : \n"+ content);
-  res.json({
+  var clearState = {
     grid: [
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
@@ -18,7 +18,8 @@ router.get('/', function(req, res, next) {
     ],
     inserts: 0,
     votes: [0, 0, 0, 0, 0, 0, 0]
-  });
+  }
+  res.json(clearState);
 });
 
 module.exports = router;
