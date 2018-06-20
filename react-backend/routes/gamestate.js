@@ -4,6 +4,7 @@ var fs = require("fs");
 
 /* GET The State of the Game */
 router.get('/', function(req, res, next) {
+
   console.log("\n *START* \n");
 
   var content = fs.readFileSync("./database/gamestate.json");
@@ -12,12 +13,23 @@ router.get('/', function(req, res, next) {
   res.json(JSON.parse(content));
 });
 
+/* POST vote to server */
 router.post('/', function(req, res, next) {
+
   console.log("\n *Received* \n");
+  //Stores vote as number
   var vote = req.body.vote;
+
+  //Reads old state
   var content = fs.readFileSync("./database/gamestate.json");
   var oldState = JSON.parse(content);
+
   console.log(oldState);
+
+  //
+  // FIGURE OUT HOW TO UPDATE JSON
+  //
+
   res.json(JSON.parse(content));
 });
 
