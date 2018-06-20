@@ -17,7 +17,8 @@ export default class Connect4 extends Component {
                 [0, 0, 2, 0, 0, 0, 0],
                 [0, 1, 2, 1, 0, 0, 0]
             ],
-            inserts: 0
+            inserts: 0,
+            votes: [0, 0, 0, 0, 0, 0, 0]
         };
     }
     insertPiece = (column) => {
@@ -27,15 +28,19 @@ export default class Connect4 extends Component {
             //console.log(newGrid);
         }
         console.log(column + " added")
+        let newVotes = this.state.votes;
+        newVotes[column] = 1;
         this.setState({
-            grid: newGrid
+            grid: newGrid,
+            inserts: (this.state.inserts+1),
+            votes: newVotes
         })
     }  
     render() {
         return (
             <div>
                 <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
-                <Connect4Status />
+                <Connect4Status inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
     }

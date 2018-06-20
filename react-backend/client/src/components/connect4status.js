@@ -5,14 +5,14 @@ export default class Connect4Status extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            results: [0, 0, 0, 0, 0, 0, 0],
+            results: this.props.votes,
             currentPlayer: 'red'
         }
     }
     render() {
         var voteList = this.state.results.map(score => {
             return (
-                    <a>{score}</a>
+                    <a style={{color: "red"}}>{score}</a>
             )
         })
         return (
