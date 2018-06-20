@@ -36,8 +36,15 @@ export default class Connect4 extends Component {
       }
     insertPiece = (column) => {
         let newGrid = this.state.grid;
+        let piecePlaced = false;
         for (let row in newGrid) {
-            let next = Number(row) + 1;
+            let firstSpot = 5-row;
+            if (newGrid[firstSpot][column] == 0 && !piecePlaced){
+                    newGrid[firstSpot][column] = 1;
+                    piecePlaced = true;
+                }
+            
+            console.log("END ROW")
             //console.log(newGrid);
         }
         console.log(column + " added")

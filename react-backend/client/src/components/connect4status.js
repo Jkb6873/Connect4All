@@ -18,6 +18,7 @@ export default class Connect4Status extends Component {
         return (
             <div>
                 {voteList}
+                <br />
                 Inserts = {this.props.inserts}
             </div>
         )
