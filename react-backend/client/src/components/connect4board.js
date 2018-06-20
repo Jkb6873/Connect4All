@@ -10,10 +10,14 @@ export default class Connect4Board extends Component {
             isActive: true
         }
     }
+    sendPosition = (position) => {
+        console.log(position);
+        this.props.insert(position);
+    }
     render() {
         const currentBoard = this.state.grid.map((row, col) => {
             return(<div key = {col}>
-                {row.map((cell, index) => <Connect4Piece key={index} value={cell}/>)}
+                {row.map((cell, index) => <Connect4Piece position={index} key={index + col} value={cell} sendPosition={this.sendPosition.bind(this)}/>)}
             </div>)
     })
         return (

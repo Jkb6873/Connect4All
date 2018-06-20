@@ -8,8 +8,10 @@ export default class Connect4Piece extends Component {
     constructor(props){
         super(props);
         this.state = {
-            owner: this.props.value
         }
+    }
+    sendPosition = () => {
+        this.props.sendPosition(this.props.position);
     }
     render(){
         var colors = {
@@ -19,7 +21,7 @@ export default class Connect4Piece extends Component {
         }
         let color = colors[this.props.value]
         return (
-            <button>
+            <button onClick={this.sendPosition.bind(this)}>
                 <img src={color} style={{
                             width: 75,
                             height: 75}} alt="red" />
