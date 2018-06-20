@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Connect4Board from './connect4board.js';
-import axios from 'axios';
 import Connect4Status from './connect4status.js';
 
 
