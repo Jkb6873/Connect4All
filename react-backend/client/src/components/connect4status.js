@@ -6,8 +6,11 @@ export default class Connect4Status extends Component {
         super(props);
         this.state = {
             results: this.props.votes,
-            currentPlayer: 'red'
+            currentPlayer: this.props.team
         }
+    }
+    componentWillReceiveProps(newProps) {
+        this.setState({currentPlayer: newProps.team});
     }
     render() {
         var voteList = this.state.results.map(score => {
@@ -20,6 +23,8 @@ export default class Connect4Status extends Component {
                 {voteList}
                 <br />
                 Inserts = {this.props.inserts}
+                <br />
+                Current Player = {this.state.currentPlayer}
             </div>
         )
     }

@@ -18,7 +18,8 @@ export default class Connect4 extends Component {
             ],
             inserts: 0,
             votes: [0, 0, 0, 0, 0, 0, 0],
-            userName: ""
+            userName: "",
+            currentTeam: 1
         };
     }
     componentDidMount() {
@@ -40,7 +41,7 @@ export default class Connect4 extends Component {
         for (let row in newGrid) {
             let firstSpot = 5-row;
             if (newGrid[firstSpot][column] == 0 && !piecePlaced){
-                    newGrid[firstSpot][column] = 1;
+                    newGrid[firstSpot][column] = this.state.currentTeam;
                     piecePlaced = true;
                 }
             
@@ -49,18 +50,24 @@ export default class Connect4 extends Component {
         }
         console.log(column + " added")
         let newVotes = this.state.votes;
+        let nextTeam = 0;
+        if (this.state.currentTeam == 1){
+            nextTeam = 2;
+        }
+        else nextTeam = 1;
         newVotes[column] = 1;
         this.setState({
             grid: newGrid,
             inserts: (this.state.inserts+1),
-            votes: newVotes
+            votes: newVotes,
+            currentTeam: nextTeam
         })
     }  
     render() {
         return (
             <div>
                 <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
-                <Connect4Status inserts={this.state.inserts} votes={this.state.votes}/>
+                <Connect4Status team= {this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
     }
