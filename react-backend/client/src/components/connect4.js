@@ -17,9 +17,23 @@ export default class Connect4 extends Component {
                 [0, 1, 2, 1, 0, 0, 0]
             ],
             inserts: 0,
-            votes: [0, 0, 0, 0, 0, 0, 0]
+            votes: [0, 0, 0, 0, 0, 0, 0],
+            userName: ""
         };
     }
+    componentDidMount() {
+        if(!this.state.userName){
+            //this.promptUserName();
+        }
+        fetch('/users')
+            .then(res => res.json())
+            .then(newState => {
+                let gamestate = newState.grid;
+                this.setState({grid: gamestate});
+                console.log(gamestate);
+            })
+        //this.setState(newState)
+      }
     insertPiece = (column) => {
         let newGrid = this.state.grid;
         for (let row in newGrid) {
