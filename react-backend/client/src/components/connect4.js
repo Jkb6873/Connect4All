@@ -14,7 +14,7 @@ export default class Connect4 extends Component {
                 [0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 2, 0, 0, 0, 0],
-                [0, 1, 2, 1, 0, 0, 0]
+                [0, 1, 2, 1, 1, 1, 0]
             ],
             inserts: 0,
             votes: [0, 0, 0, 0, 0, 0, 0],
@@ -23,15 +23,17 @@ export default class Connect4 extends Component {
         };
     }
     componentDidMount() {
+        //Check if user is logged in
         if(!this.state.userName){
             //this.promptUserName();
         }
+        //Fetch state of game
         fetch('/gamestate')
             .then(res => res.json())
             .then(newState => {
                 let gamestate = newState.grid;
                 this.setState({grid: gamestate});
-                console.log(gamestate);
+                console.log(newState);
             })
         //this.setState(newState)
       }

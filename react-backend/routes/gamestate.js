@@ -1,25 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var fs = require("fs");
+var gamestate = require('../database/gamestate.json')
 
-/* GET users listing. */
+/* GET The State of the Game */
 router.get('/', function(req, res, next) {
   console.log("\n *START* \n");
+  var newState = gamestate;
+  console.log("JSON ", newState);
+
   var content = fs.readFileSync("./database/gamestate.json");
   console.log("Output Content : \n"+ content);
-  var clearState = {
-    grid: [
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0]
-    ],
-    inserts: 0,
-    votes: [0, 0, 0, 0, 0, 0, 0]
-  }
-  res.json(clearState);
+
+  res.json(JSON.parse(content));
 });
 
 module.exports = router;
