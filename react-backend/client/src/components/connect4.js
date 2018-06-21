@@ -37,6 +37,21 @@ export default class Connect4 extends Component {
             })
         //this.setState(newState)
       }
+    finishTurn = () => {
+        const votingArray = this.state.votes
+        console.log(votingArray);
+        let maxValue = votingArray[0];
+        let maxIndex = 0;
+        for (let scoreCheck in votingArray) {
+            console.log("CURRENT: ",scoreCheck, " MAX: ",maxIndex, " ",maxValue)
+            if (votingArray[scoreCheck] > maxValue){
+                maxIndex = scoreCheck;
+                maxValue = votingArray[scoreCheck];
+            }
+        }
+        console.log("WINNDER: ", maxIndex)
+
+    }
     insertPiece = (column) => {
         let newGrid = this.state.grid;
         let piecePlaced = false;
@@ -72,21 +87,22 @@ export default class Connect4 extends Component {
         .then(newState => {
             //let gamestate = newState.grid;
             //this.setState({grid: gamestate});
-            console.log(newState);
+            newState = JSON.parse(newState);
+            this.setState(newState);
         })
                 
-        this.setState({
-            grid: newGrid,
-            inserts: (this.state.inserts+1),
-            votes: newVotes,
-            currentTeam: nextTeam
-        })
+        // this.setState({
+        //     grid: newGrid,
+        //     inserts: (this.state.inserts+1),
+        //     votes: newVotes,
+        //     currentTeam: nextTeam
+        // })
     }  
     render() {
         return (
             <div>
                 <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
-                <Connect4Status team= {this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
+                <Connect4Status submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
     }

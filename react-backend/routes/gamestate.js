@@ -25,6 +25,10 @@ router.post('/', function(req, res, next) {
   var oldState = JSON.parse(content);
   //var outputState = JSON.stringify(oldState, null, 2);
 
+  oldState.votes[vote]++;
+  console.log(oldState.votes);
+
+  fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState));
 
   console.log("OUTPUT OLD STATE " + outputState);
 
@@ -56,7 +60,8 @@ router.post('/', function(req, res, next) {
   console.log("\n NEW \n" + outputState);
   fs.writeFileSync("./database/gamestate.json", outputState);
 
-  res.json(JSON.parse(content));
+
+  res.json(JSON.stringify(oldState));
 });
 
 module.exports = router;
