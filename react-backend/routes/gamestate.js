@@ -35,17 +35,14 @@ router.post('/', function(req, res, next) {
   console.log("CHECKING OLDSTATE MEMBER " + oldState.grid[rowIndex][vote]);
 
   // LOGIC TO UPDATE JSON
-  var flipped = false;
   
   while(oldState.grid[rowIndex][vote] != "0"){
-    //console.log("FLIPPED " +flipped);
     if(oldState.grid[rowIndex][vote] == "0"){
       flipped = true;
     }
     else{
       rowIndex--;
     }
-    //oldState.grid[rowIndex][vote] = 1;
   }
 
   console.log("Row index: " + rowIndex);
@@ -53,9 +50,7 @@ router.post('/', function(req, res, next) {
 
   // 1 is a placeholder. It's suppose to be the turn of the player
   oldState.grid[rowIndex][vote] = 1;
-  //
-  // FIGURE OUT HOW TO UPDATE JSON
-  //
+  
   var outputState = JSON.stringify(oldState, null, 2);
 
   console.log("\n NEW \n" + outputState);

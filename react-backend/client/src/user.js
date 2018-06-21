@@ -1,7 +1,8 @@
-// Two member variables
-// name: To keep track of username
-// move: To keep track if user has made a move
-// id: To keep track of the user's ID
+/*
+** name: To keep track of username
+** move: To keep track if user has made a move
+** id: To keep track of the user's ID
+*/
 class User {
 	// Constructor when a user object is created
 	constructor(name, id){
@@ -21,7 +22,7 @@ class User {
 	getMoveState(){
 	  	return this.move;
 	}
-
+	// Get ID of user
 	getID(){
 		return this.id;
 	}
