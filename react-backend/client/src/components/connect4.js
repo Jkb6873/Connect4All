@@ -38,19 +38,48 @@ export default class Connect4 extends Component {
         //this.setState(newState)
       }
     finishTurn = () => {
-        const votingArray = this.state.votes
-        console.log(votingArray);
-        let maxValue = votingArray[0];
-        let maxIndex = 0;
-        for (let scoreCheck in votingArray) {
-            console.log("CURRENT: ",scoreCheck, " MAX: ",maxIndex, " ",maxValue)
-            if (votingArray[scoreCheck] > maxValue){
-                maxIndex = scoreCheck;
-                maxValue = votingArray[scoreCheck];
-            }
-        }
-        console.log("WINNDER: ", maxIndex)
+        // const votingArray = this.state.votes
+        // console.log(votingArray);
+        // let maxValue = votingArray[0];
+        // let maxIndex = 0;
+        // for (let scoreCheck in votingArray) {
+        //     console.log("CURRENT: ",scoreCheck, " MAX: ",maxIndex, " ",maxValue)
+        //     if (votingArray[scoreCheck] > maxValue){
+        //         maxIndex = scoreCheck;
+        //         maxValue = votingArray[scoreCheck];
+        //     }
+        // }
+        fetch('/gamestate/turn')
+            .then(res => res.json())
+            .then(newState => {
+                console.log(newState);
+                this.setState(JSON.parse(newState));
+                
+            })
 
+    }
+    restartGame = () => {
+        // let clearState = {
+        //         grid: [
+        //             [0, 0, 0, 0, 0, 0, 0],
+        //             [0, 0, 0, 0, 0, 0, 0],
+        //             [0, 0, 0, 0, 0, 0, 0],
+        //             [0, 0, 0, 0, 0, 0, 0],
+        //             [0, 0, 0, 0, 0, 0, 0],
+        //             [0, 0, 0, 0, 0, 0, 0]
+        //         ],
+        //         inserts: 0,
+        //         votes: [0, 0, 0, 0, 0, 0, 0],
+        //         currentTeam: 1
+        // }
+        fetch('/gamestate/restart')
+            .then(res => res.json())
+            .then(newState => {
+                console.log(newState);
+                this.setState(JSON.parse(newState));
+                
+            })
+        //this.setState(clearState);
     }
     insertPiece = (column) => {
         let newGrid = this.state.grid;
@@ -77,7 +106,7 @@ export default class Connect4 extends Component {
         let move = {
             vote: column
         }
-        fetch('/gamestate', {
+        fetch('/gamestate/vote', {
             method: 'POST', // or 'PUT'
             body: JSON.stringify(move), // data can be `string` or {object}!
             headers:{
@@ -102,7 +131,7 @@ export default class Connect4 extends Component {
         return (
             <div>
                 <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
-                <Connect4Status submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
+                <Connect4Status restart={this.restartGame.bind(this)} submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
     }
