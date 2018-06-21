@@ -42,6 +42,7 @@ router.get('/turn', function(req, res, next) {
   oldState.grid = newGrid;
   oldState.inserts++;
   oldState.votes = [0,0,0,0,0,0,0];
+  oldState.currentTeam = (oldState.inserts % 2) + 1;
   console.log("WINNDER: ", maxIndex)
 
   //Write gamestate to database

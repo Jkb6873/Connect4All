@@ -11,7 +11,9 @@ export default class Connect4Piece extends Component {
         }
     }
     sendPosition = () => {
-        this.props.sendPosition(this.props.position);
+       // if (this.props.activeGame) {
+            this.props.sendPosition(this.props.position);
+        //}
     }
     render(){
         var colors = {
@@ -19,7 +21,7 @@ export default class Connect4Piece extends Component {
             1: redcircle,
             2: yellowcircle
         }
-        let color = colors[this.props.value]
+        let color = colors[this.props.value];
         return (
             <button onClick={this.sendPosition.bind(this)}>
                 <img src={color} style={{

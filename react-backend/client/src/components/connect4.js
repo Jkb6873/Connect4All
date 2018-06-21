@@ -18,8 +18,15 @@ export default class Connect4 extends Component {
             ],
             inserts: 0,
             votes: [0, 0, 0, 0, 0, 0, 0],
+
             userName: "",
-            currentTeam: 1
+            assignedTeam: 1,
+
+            currentTeam: 1,
+            redTeam: 0,
+            yellowTeam: 0,
+
+            timer: 0
         };
     }
     componentDidMount() {
@@ -27,28 +34,20 @@ export default class Connect4 extends Component {
         if(!this.state.userName){
             //this.promptUserName();
         }
-        //Fetch state of game
+        this.refreshState();
+        this.interval = setInterval(() => this.refreshState(), 1000)
+
+    }
+    //Fetch state of game
+    refreshState = () => {
         fetch('/gamestate')
             .then(res => res.json())
             .then(newState => {
-                let gamestate = newState.grid;
-                this.setState({grid: gamestate});
+                this.setState(newState);
                 console.log(newState);
             })
-        //this.setState(newState)
-      }
+    }
     finishTurn = () => {
-        // const votingArray = this.state.votes
-        // console.log(votingArray);
-        // let maxValue = votingArray[0];
-        // let maxIndex = 0;
-        // for (let scoreCheck in votingArray) {
-        //     console.log("CURRENT: ",scoreCheck, " MAX: ",maxIndex, " ",maxValue)
-        //     if (votingArray[scoreCheck] > maxValue){
-        //         maxIndex = scoreCheck;
-        //         maxValue = votingArray[scoreCheck];
-        //     }
-        // }
         fetch('/gamestate/turn')
             .then(res => res.json())
             .then(newState => {
@@ -59,19 +58,7 @@ export default class Connect4 extends Component {
 
     }
     restartGame = () => {
-        // let clearState = {
-        //         grid: [
-        //             [0, 0, 0, 0, 0, 0, 0],
-        //             [0, 0, 0, 0, 0, 0, 0],
-        //             [0, 0, 0, 0, 0, 0, 0],
-        //             [0, 0, 0, 0, 0, 0, 0],
-        //             [0, 0, 0, 0, 0, 0, 0],
-        //             [0, 0, 0, 0, 0, 0, 0]
-        //         ],
-        //         inserts: 0,
-        //         votes: [0, 0, 0, 0, 0, 0, 0],
-        //         currentTeam: 1
-        // }
+       
         fetch('/gamestate/restart')
             .then(res => res.json())
             .then(newState => {
@@ -79,7 +66,6 @@ export default class Connect4 extends Component {
                 this.setState(JSON.parse(newState));
                 
             })
-        //this.setState(clearState);
     }
     insertPiece = (column) => {
         let newGrid = this.state.grid;
@@ -130,7 +116,7 @@ export default class Connect4 extends Component {
     render() {
         return (
             <div>
-                <Connect4Board insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
+                <Connect4Board isActive={this.state.currentTeam && this.state.assignedTeam} insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
                 <Connect4Status restart={this.restartGame.bind(this)} submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
