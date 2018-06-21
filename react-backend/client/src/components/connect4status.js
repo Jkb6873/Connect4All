@@ -16,10 +16,13 @@ export default class Connect4Status extends Component {
     submitMove() {
         this.props.submitMove();
     }
+    restart() {
+        this.props.restart();
+    }
     render() {
         var voteList = this.state.results.map(score => {
             return (
-                    <a style={{color: "red"}}>{score + " "}</a>
+                    <a style={{color: "red", padding: 42}}>{score}</a>
             )
         })
         return (
@@ -31,6 +34,8 @@ export default class Connect4Status extends Component {
                 Current Player = {this.state.currentPlayer}
                 <br />
                 <button onClick={this.submitMove.bind(this)}> Submit Move </button>
+                <br />
+                <button onClick={this.restart.bind(this)}> Restart Game </button>
             </div>
         )
     }
