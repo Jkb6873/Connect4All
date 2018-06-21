@@ -100,6 +100,7 @@ router.post('/vote', function(req, res, next) {
   //Reads old state
   var content = fs.readFileSync("./database/gamestate.json");
   var oldState = JSON.parse(content);
+  //var outputState = JSON.stringify(oldState, null, 2);
 
   //Updates vote array
   oldState.votes[vote]++;
@@ -107,6 +108,7 @@ router.post('/vote', function(req, res, next) {
 
   //Writes updated voting array to file
   fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState));
+
 
   //Returns updated vote count
   res.json(JSON.stringify(oldState));
