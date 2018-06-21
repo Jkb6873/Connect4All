@@ -23,15 +23,42 @@ router.post('/', function(req, res, next) {
   //Reads old state
   var content = fs.readFileSync("./database/gamestate.json");
   var oldState = JSON.parse(content);
+  //var outputState = JSON.stringify(oldState, null, 2);
 
   oldState.votes[vote]++;
   console.log(oldState.votes);
 
   fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState));
 
-  //
-  // FIGURE OUT HOW TO UPDATE JSON
-  //
+  console.log("OUTPUT OLD STATE " + outputState);
+
+  var rowIndex = 5;
+  var columnIndex = vote;
+
+  console.log("VOTE INDEX " + vote);
+  console.log("CHECKING OLDSTATE MEMBER " + oldState.grid[rowIndex][vote]);
+
+  // LOGIC TO UPDATE JSON
+  
+  while(oldState.grid[rowIndex][vote] != "0"){
+    if(oldState.grid[rowIndex][vote] == "0"){
+      flipped = true;
+    }
+    else{
+      rowIndex--;
+    }
+  }
+
+  console.log("Row index: " + rowIndex);
+
+
+  // 1 is a placeholder. It's suppose to be the turn of the player
+  oldState.grid[rowIndex][vote] = 1;
+  
+  var outputState = JSON.stringify(oldState, null, 2);
+
+  console.log("\n NEW \n" + outputState);
+  fs.writeFileSync("./database/gamestate.json", outputState);
 
 
   res.json(JSON.stringify(oldState));
