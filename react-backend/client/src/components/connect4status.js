@@ -6,7 +6,7 @@ export default class Connect4Status extends Component {
         super(props);
         this.state = {
             results: this.props.votes,
-            currentPlayer: this.props.team
+            currentPlayer: this.props.team,
         }
     }
     componentWillReceiveProps(newProps) {
@@ -25,6 +25,13 @@ export default class Connect4Status extends Component {
                     <a style={{color: "red", padding: 42}}>{score}</a>
             )
         })
+        var loginField = function(){
+            return (<div>
+                        <button onClick={this.props.login()}>
+                        Login: </button><input type="text" />
+                    </div>);
+
+        }
         return (
             <div>
                 {voteList}
@@ -36,6 +43,8 @@ export default class Connect4Status extends Component {
                 <button onClick={this.submitMove.bind(this)}> Submit Move </button>
                 <br />
                 <button onClick={this.restart.bind(this)}> Restart Game </button>
+                <br />
+                {loginField}
             </div>
         )
     }
