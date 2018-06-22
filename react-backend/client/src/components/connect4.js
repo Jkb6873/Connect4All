@@ -23,18 +23,19 @@ export default class Connect4 extends Component {
             assignedTeam: 1,
 
             currentTeam: 1,
-            redTeam: 0,
-            yellowTeam: 0,
+            redPlayers: 0,
+            yellowPlayers: 0,
 
             timer: 0
         };
     }
     componentDidMount() {
+        this.refreshState();
+
         //Check if user is logged in
         if(!this.state.userName){
-            //this.promptUserName();
+            this.newUserPage();
         }
-        this.refreshState();
         this.interval = setInterval(() => this.refreshState(), 1000)
 
     }
@@ -100,23 +101,32 @@ export default class Connect4 extends Component {
             }
       }).then(res => res.json())
         .then(newState => {
-            //let gamestate = newState.grid;
-            //this.setState({grid: gamestate});
             newState = JSON.parse(newState);
             this.setState(newState);
         })
                 
-        // this.setState({
-        //     grid: newGrid,
-        //     inserts: (this.state.inserts+1),
-        //     votes: newVotes,
-        //     currentTeam: nextTeam
-        // })
+
     }  
+
+    newUserPage() {
+        //GET USERNAME
+        let username = "andgly95";
+        var yourTeam;
+        if (this.state.yellowPlayers < this.state.redPlayers) {
+            yourTeam = 2
+        }
+        else yourTeam = 1;
+        let logIn = {
+            userName: username,
+            assignedTeam: yourTeam
+        }
+        this.setState(logIn);
+    }
+
     render() {
         return (
             <div>
-                <Connect4Board isActive={this.state.currentTeam && this.state.assignedTeam} insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
+                <Connect4Board isActive={this.state.currentTeam == this.state.assignedTeam} insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
                 <Connect4Status restart={this.restartGame.bind(this)} submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
