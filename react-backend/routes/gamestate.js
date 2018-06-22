@@ -40,36 +40,21 @@ router.get('/turn', function(req, res, next) {
 
   //Add piece to Grid
   let newGrid = oldState.grid;
-  console.log(newGrid);
-  let piecePlaced = false;
   var victory = placeDisc(newGrid, ((oldState.inserts % 2) + 1), maxIndex);
-  if (victory){  
-    fs.writeFileSync("./database/gamestate.json", JSON.stringify(clearState));
-    res.json(JSON.stringify(clearState));
-  }
   console.log(newGrid);
-  /*console.log(newGrid);
-  for (let row in newGrid) {
-    let firstSpot = 5 - row;
-    console.log(firstSpot);
-    if (newGrid[firstSpot][maxIndex] == 0 && !piecePlaced) {
-      console.log("IF");
-      newGrid[firstSpot][maxIndex] = (oldState.inserts % 2) + 1;
-      piecePlaced = true;
-    }
-  }*/
-
-  //Update gamestate
   oldState.grid = newGrid;
   oldState.inserts++;
   oldState.votes = [0,0,0,0,0,0,0];
   console.log("WINNDER: ", maxIndex)
 
-  //Write gamestate to database
-  fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState))
-
-  //Return updated gamestate
-  res.json(JSON.stringify(oldState));
+  if (victory){  
+    fs.writeFileSync("./database/gamestate.json", JSON.stringify(clearState));
+    res.json(JSON.stringify(clearState));
+  }
+  else{
+    fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState))
+    res.json(JSON.stringify(oldState));
+  }
 });
 
 /* GET Restart Game */
