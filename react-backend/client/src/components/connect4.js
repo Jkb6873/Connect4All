@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Connect4Board from './connect4board.js';
 import Connect4Status from './connect4status.js';
+//import LogInForm from './loginform.js';
 
 
 export default class Connect4 extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         var voted = false;
         this.state = {
             grid: [
@@ -20,13 +21,14 @@ export default class Connect4 extends Component {
             votes: [0, 0, 0, 0, 0, 0, 0],
 
             userName: "",
-            assignedTeam: 1,
+            assignedTeam: 0,
 
             currentTeam: 1,
             redPlayers: 0,
             yellowPlayers: 0,
 
-            timer: 0
+            timer: 0,
+            entry: ""
         };
     }
     componentDidMount() {
@@ -34,10 +36,50 @@ export default class Connect4 extends Component {
 
         //Check if user is logged in
         if(!this.state.userName){
-            this.newUserPage();
+            console.log("NOT LOGED IN")
         }
-        this.interval = setInterval(() => this.refreshState(), 1000)
 
+        this.interval = setInterval(() => this.refreshState(), 1000)
+        
+
+    }
+
+    handleSubmit(){
+     const username = this.state.entry;
+     this.logIn(username);
+    //  this.setState({
+    //     username: username
+    //  })
+    }
+
+    handleChange(event) {
+        this.setState({entry: event.target.value});
+    }
+
+    logIn(username) {
+        var yourTeam;
+        if (this.state.yellowPlayers < this.state.redPlayers) {
+            yourTeam = 2
+        }
+        else yourTeam = 1;
+        let log = {
+            userName: username,
+            assignedTeam: yourTeam
+        }
+        fetch('/gamestate/login', {
+            method: 'POST', // or 'PUT'
+            body: JSON.stringify(log), // data can be `string` or {object}!
+            headers:{
+            'Content-Type': 'application/json'
+            }
+        }).then(res => res.json())
+        .then(newState => {
+            newState = JSON.parse(newState);
+            newState["username"] = log.userName;
+            newState["assignedTeam"] = log.assignedTeam;
+            console.log("LOGIN", newState);
+            this.setState(newState);
+    })
     }
     //Fetch state of game
     refreshState = () => {
@@ -113,26 +155,27 @@ export default class Connect4 extends Component {
 
     }  
 
-    newUserPage() {
-        //GET USERNAME
-        let username = "andgly95";
-        var yourTeam;
-        if (this.state.yellowPlayers < this.state.redPlayers) {
-            yourTeam = 2
-        }
-        else yourTeam = 1;
-        let logIn = {
-            userName: username,
-            assignedTeam: yourTeam
-        }
-        this.setState(logIn);
-    }
+
 
     render() {
+        const user = (this.state.username)? this.state.username: "";
+        console.log("user:", user)
+        var userfield = user ? ("Welcome: " + user ) : "Please Log In";
+        var teamname;
+        if (this.state.assignedTeam == 1) {
+            teamname = "Red"
+        } else if (this.state.assignedTeam == 2) {
+            teamname = "Yellow"
+        }
+        else teamname = "unassigned";
         return (
             <div>
+                {userfield}<br />
+                You are on team {teamname}<br />
+                <button onClick={this.handleSubmit.bind(this)}>
+                Login: </button><input type="text" value={this.state.entry} onChange={this.handleChange.bind(this)}/>
                 <Connect4Board isActive={this.state.currentTeam == this.state.assignedTeam} insert={this.insertPiece.bind(this)} grid={this.state.grid}/>
-                <Connect4Status restart={this.restartGame.bind(this)} submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
+                <Connect4Status login={this.logIn.bind(this)} restart={this.restartGame.bind(this)} submitMove={this.finishTurn.bind(this)} team={this.state.currentTeam} inserts={this.state.inserts} votes={this.state.votes}/>
             </div>
         )
     }

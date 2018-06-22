@@ -77,7 +77,7 @@ router.get('/', function(req, res, next) {
 
   //Read gamestate from file
   var content = fs.readFileSync("./database/gamestate.json");
-  console.log("Output Content : \n"+ content);
+  //console.log("Output Content : \n"+ content);
 
   //Return state to client
   res.json(JSON.parse(content));
@@ -106,6 +106,63 @@ router.post('/vote', function(req, res, next) {
   //Returns updated vote count
   res.json(JSON.stringify(oldState));
 });
+
+/* LOGIN to Server */
+router.post('/login', function(req, res, next) {
+
+  console.log("\n *Log In* \n");
+  //Stores log as object
+  var log = {
+    userName: req.body.userName,
+    assignedTeam: req.body.assignedTeam
+  }
+
+  //Reads old userlog
+  var usercontent = fs.readFileSync("./database/users.json");
+  var oldUserLog = JSON.parse(usercontent);
+
+  //Search Users
+  console.log(oldUserLog);
+  let found = 0;
+  for (let user in oldUserLog){
+    console.log("LOOP")
+    if (oldUserLog[user].userName == log.userName){
+      console.log("FOUND")
+      found = 1;
+      oldUserLog[user].assignedTeam = log.assignedTeam;
+    }
+  }
+
+  if(!found){
+    console.log("Pushed")
+    oldUserLog.push(log);
+    console.log(oldUserLog);
+  }
+
+  //Reads old state
+  var content = fs.readFileSync("./database/gamestate.json");
+  var oldState = JSON.parse(content);
+
+  if (log.assignedTeam == 1) {
+    oldState.redPlayers++
+  }
+  if (log.assignedTeam == 2) {
+    oldState.yellowPlayers++
+  }
+
+  //Writes updated voting array to file
+  fs.writeFileSync("./database/users.json", JSON.stringify(oldUserLog));
+
+  //Writes updated voting array to file
+  fs.writeFileSync("./database/gamestate.json", JSON.stringify(oldState));
+
+
+  //Returns updated vote count
+  res.json(JSON.stringify(oldState));
+
+});
+
+
 
 function checkForVictory(player,field,row,col){
 
