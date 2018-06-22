@@ -229,7 +229,7 @@ $(function() {
   socket.on('login', (data) => {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – ";
+    var message = "Welcome to Connect4All Chat – ";
     log(message, {
       prepend: true
     });
@@ -251,16 +251,6 @@ $(function() {
   socket.on('user left', (data) => {
     log(data.username + ' left');
     addParticipantsMessage(data);
-    removeChatTyping(data);
-  });
-
-  // Whenever the server emits 'typing', show the typing message
-  socket.on('typing', (data) => {
-    addChatTyping(data);
-  });
-
-  // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', (data) => {
     removeChatTyping(data);
   });
 
