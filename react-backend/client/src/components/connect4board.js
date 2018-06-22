@@ -10,6 +10,9 @@ export default class Connect4Board extends Component {
             isActive: true
         }
     }
+    componentWillReceiveProps(newProps) {
+        this.setState({grid: newProps.grid});
+    }
     sendPosition = (position) => {
         console.log(position);
         this.props.insert(position);
