@@ -6,7 +6,7 @@ import Connect4Status from './connect4status.js';
 export default class Connect4 extends Component {
     constructor() {
         super();
-    
+        var voted = false;
         this.state = {
             grid: [
                 [0, 0, 0, 0, 0, 0, 0],
@@ -34,7 +34,7 @@ export default class Connect4 extends Component {
                 let gamestate = newState.grid;
                 this.setState({grid: gamestate});
                 console.log(newState);
-            })
+            });
         //this.setState(newState)
       }
     finishTurn = () => {
@@ -54,8 +54,7 @@ export default class Connect4 extends Component {
             .then(newState => {
                 console.log(newState);
                 this.setState(JSON.parse(newState));
-                
-            })
+            }).then(this.voted = false);
 
     }
     restartGame = () => {
@@ -84,13 +83,15 @@ export default class Connect4 extends Component {
     insertPiece = (column) => {
         let newGrid = this.state.grid;
         let piecePlaced = false;
+        //for row in grid
         for (let row in newGrid) {
+            //going backwards
             let firstSpot = 5-row;
+            //if not placed and free, place
             if (newGrid[firstSpot][column] == 0 && !piecePlaced){
                     newGrid[firstSpot][column] = this.state.currentTeam;
                     piecePlaced = true;
                 }
-            
             console.log("END ROW")
             //console.log(newGrid);
         }
@@ -106,20 +107,23 @@ export default class Connect4 extends Component {
         let move = {
             vote: column
         }
-        fetch('/gamestate/vote', {
-            method: 'POST', // or 'PUT'
-            body: JSON.stringify(move), // data can be `string` or {object}!
-            headers:{
-            'Content-Type': 'application/json'
-            }
-      }).then(res => res.json())
+        if(!this.voted){
+            fetch('/gamestate/vote', {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(move), // data can be `string` or {object}!
+                headers:{
+                'Content-Type': 'application/json'
+                }
+        }).then(res => res.json())
         .then(newState => {
             //let gamestate = newState.grid;
             //this.setState({grid: gamestate});
             newState = JSON.parse(newState);
             this.setState(newState);
+            //Connect4Board.setState({isActive:true});
         })
-                
+        this.voted = true;
+        }
         // this.setState({
         //     grid: newGrid,
         //     inserts: (this.state.inserts+1),
